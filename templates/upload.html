@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload & Match - Face Recognition System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333; 
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #667eea;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .upload-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .upload-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .upload-header p {
+            color: #666;
+        }
+        .upload-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #5a6fd8;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        .upload-area.dragover {
+            border-color: #5a6fd8;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .upload-subtext {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        .file-input {
+            display: none;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .flash {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .flash.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .flash.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .file-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .file-info.show {
+            display: block;
+        }
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .file-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .file-details h4 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .file-details p {
+            color: #666;
+            font-size: 14px;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .instructions h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .instructions li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .instructions li:before {
+            content: "📷";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🎓 Face Recognition System</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('attendance') }}">Attendance</a></li>
+                <li><a href="{{ url_for('upload') }}">Upload & Match</a></li>
+                <li><a href="{{ url_for('admin_login') }}">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="upload-header">
+            <h1>📤 Upload & Match</h1>
+            <p>Upload a photo to identify students and view their information</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Instructions</h3>
+            <ul>
+                <li>Upload a clear photo containing a face</li>
+                <li>Supported formats: PNG, JPG, JPEG</li>
+                <li>Make sure the face is clearly visible and well-lit</li>
+                <li>The system will identify the student and show their information</li>
+                <li>Perfect for verification and record checking</li>
+            </ul>
+        </div>
+
+        <div class="upload-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Click to upload or drag and drop</div>
+                <div class="upload-subtext">PNG, JPG, JPEG files only</div>
+                <input type="file" id="fileInput" class="file-input" accept="image/png,image/jpeg,image/jpg">
+            </div>
+
+            <div id="fileInfo" class="file-info">
+                <div class="file-preview">
+                    <img id="previewImg" src="" alt="Preview">
+                    <div class="file-details">
+                        <h4 id="fileName"></h4>
+                        <p id="fileSize"></p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="uploadForm" action="{{ url_for('match') }}" method="post" enctype="multipart/form-data" style="display: none;">
+                <input type="file" id="formFileInput" name="image" accept="image/png,image/jpeg,image/jpg">
+            </form>
+
+            <div class="form-actions">
+                <button id="uploadBtn" class="btn" disabled>🔍 Match Face</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const formFileInput = document.getElementById('formFileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInfo = document.getElementById('fileInfo');
+        const previewImg = document.getElementById('previewImg');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Upload button click
+        uploadBtn.addEventListener('click', () => {
+            if (formFileInput.files.length > 0) {
+                uploadForm.submit();
+            }
+        });
+
+        function handleFile(file) {
+            // Validate file type
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (PNG, JPG, JPEG)');
+                return;
+            }
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Set file for form
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            formFileInput.files = dataTransfer.files;
+
+            // Show file info
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Show file info and enable upload button
+            fileInfo.classList.add('show');
+            uploadBtn.disabled = false;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>
+
