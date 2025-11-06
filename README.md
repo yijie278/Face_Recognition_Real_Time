@@ -1,8 +1,8 @@
-# 🎓 Face Recognition Attendance System
+# Face Recognition Attendance System
 
 A comprehensive web application for student attendance management using real-time face recognition technology with Firebase integration.
 
-## ✨ Features
+## Features
 
 - **Real-time Attendance**: Mark attendance using device camera with instant face recognition
 - **Admin Dashboard**: Complete student management system for administrators
@@ -12,7 +12,7 @@ A comprehensive web application for student attendance management using real-tim
 - **Firebase Integration**: Secure cloud storage and real-time database
 - **Modern UI**: Beautiful, responsive design with intuitive navigation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -57,7 +57,7 @@ A comprehensive web application for student attendance management using real-tim
    - Open your browser and go to `http://localhost:5000`
    - Use admin credentials: `admin` / `admin123`
 
-## 📱 Usage
+## Usage
 
 ### For Students
 1. Go to the **Attendance** page
@@ -79,7 +79,7 @@ A comprehensive web application for student attendance management using real-tim
 3. The system will identify the student and show their information
 4. Perfect for verification and record checking
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 FaceRecognitionRealTime/
@@ -105,7 +105,7 @@ FaceRecognitionRealTime/
     └── result.html           # Match results
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Firebase Configuration
 Update the Firebase URLs in `app.py`:
@@ -120,7 +120,7 @@ Change default admin credentials in `app.py`:
 if username == 'admin' and password == 'admin123':
 ```
 
-## 🛠️ Development
+## Development
 
 ### Adding New Features
 1. Create new routes in `app.py`
@@ -146,7 +146,7 @@ Students are stored in Firebase with the following structure:
 }
 ```
 
-## 🔒 Security Considerations
+## Security Considerations
 
 - Change default admin credentials in production
 - Use environment variables for sensitive data
@@ -154,14 +154,14 @@ Students are stored in Firebase with the following structure:
 - Regularly update dependencies
 - Secure Firebase rules and permissions
 
-## 📊 Performance Tips
+## Performance Tips
 
 - Optimize images before uploading (recommended: 300x300px)
 - Use good lighting for better face recognition accuracy
 - Regularly regenerate encodings when adding new students
 - Monitor Firebase usage and costs
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -184,15 +184,15 @@ Students are stored in Firebase with the following structure:
    - Run `python EncodeGenerator.py`
    - Ensure Images folder has student photos
 
-## 📝 License
+## License
 
 This project is open source and available under the MIT License.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📞 Support
+## Support
 
 For support and questions, please open an issue in the repository.
 
